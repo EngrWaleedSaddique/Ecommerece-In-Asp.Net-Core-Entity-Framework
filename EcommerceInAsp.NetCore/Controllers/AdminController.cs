@@ -83,5 +83,29 @@ namespace EcommerceInAsp.NetCore.Controllers
             var customer=_context.tbl_Customer.FirstOrDefault(x => x.customer_id == id);
             return View(customer);
         }
+        public IActionResult updateCustomer(int id) {
+            return View(_context.tbl_Customer.Find(id));
+        }
+        [HttpPost]
+        public IActionResult updateCustomer(Customer customer,IFormFile customer_image)
+        {
+            string ImagePath = Path.Combine(_env.WebRootPath, "customer_image", customer_image.FileName);
+            FileStream fs = new FileStream(ImagePath, FileMode.Create);
+            customer_image.CopyTo(fs);
+            customer.customer_image = customer_image.FileName;
+            _context.tbl_Customer.Update(customer);
+            _context.SaveChanges();
+            return RedirectToAction("fetchCustomer");
+        }
+        public IActionResult deletePermission(int id) {
+            var customer = _context.tbl_Customer.Find(id);
+            return View(_context.tbl_Customer.FirstOrDefault(x => x.customer_id == id));
+        }
+        public IActionResult deleteCustomer(int id) {
+            var customer = _context.tbl_Customer.Find(id);
+            _context.tbl_Customer.Remove(customer);
+            _context.SaveChanges();
+            return RedirectToAction("fetchCustomer");
+        }
     }
 }
