@@ -75,5 +75,13 @@ namespace EcommerceInAsp.NetCore.Controllers
             _context.SaveChanges();
             return RedirectToAction("profile");
         }
+        public IActionResult fetchCustomer() {
+            var customer = _context.tbl_Customer.ToList();
+            return View(customer);
+        }
+        public IActionResult CustomerDetails(int id) {
+            var customer=_context.tbl_Customer.FirstOrDefault(x => x.customer_id == id);
+            return View(customer);
+        }
     }
 }
