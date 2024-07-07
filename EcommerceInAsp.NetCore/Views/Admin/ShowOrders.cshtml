@@ -1,0 +1,36 @@
+﻿@model List<Orders>
+@{
+    ViewData["Title"] = "ShowOrders";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<h1>ShowOrders</h1>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Order Id</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Customer Name</th>
+                    <th>Order Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model) {
+                <tr>
+                    <td>@item.order_id</td>
+                    <td>@item.product_id</td>
+                    <td>@item.quantity </td>
+                    <td>@item.customer_id</td>
+                    <td>@item.status</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-2"></div>
+</div>

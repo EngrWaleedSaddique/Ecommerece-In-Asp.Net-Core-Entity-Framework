@@ -1,7 +1,9 @@
 ﻿using EcommerceInAsp.NetCore.Models;
+using EcommerceInAsp.NetCore.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -106,6 +108,117 @@ namespace EcommerceInAsp.NetCore.Controllers
             _context.tbl_Customer.Remove(customer);
             _context.SaveChanges();
             return RedirectToAction("fetchCustomer");
+        }
+        public IActionResult fetchCategory() {
+
+            return View(_context.tbl_Category.ToList());
+        }
+        public IActionResult addCategory() {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult addCategory(Category cat) {
+            _context.tbl_Category.Add(cat);
+            _context.SaveChanges();
+            return RedirectToAction("fetchCategory");
+        }
+        public IActionResult updateCategory(int id) {
+            var category = _context.tbl_Category.Find(id);
+            return View(category);
+        }
+        [HttpPost]
+        public IActionResult updateCategory(Category cat)
+        {
+            _context.tbl_Category.Update(cat);
+            _context.SaveChanges();
+            return RedirectToAction("fetchCategory");
+        }
+        public IActionResult deletePermissionCategory(int id)
+        {
+
+            return View(_context.tbl_Category.FirstOrDefault(x => x.category_id == id));
+        }
+        public IActionResult deleteCategory(int id) {
+            var category = _context.tbl_Category.Find(id);
+            _context.tbl_Category.Remove(category);
+            _context.SaveChanges();
+            return RedirectToAction("fetchCategory");
+        }
+        public IActionResult fetchProduct() {
+            return View(_context.tbl_Product.ToList());
+        }
+        public IActionResult addProduct() {
+            List<Category> categories = _context.tbl_Category.ToList();
+            ViewData["category"] = categories;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult addProduct(Product prod,IFormFile product_image) {
+            string imageName = Path.GetFileName(product_image.FileName);
+            string ImagePath = Path.Combine(_env.WebRootPath,"product_image",imageName);
+            FileStream fs = new FileStream(ImagePath, FileMode.Create);
+            product_image.CopyTo(fs);
+            prod.product_image = imageName;
+            _context.tbl_Product.Add(prod);
+            _context.SaveChanges();
+            return RedirectToAction("fetchProduct");
+        }
+        public IActionResult ProductDetails(int id)
+        {
+            var product = _context.tbl_Product.Include(x=>x.Category).FirstOrDefault(x => x.product_id == id);
+            return View(product);
+        }
+        public IActionResult deletePermissionProduct(int id)
+        {
+
+            return View(_context.tbl_Product.FirstOrDefault(x => x.product_id == id));
+        }
+        public IActionResult deleteProduct(int id)
+        {
+            var product = _context.tbl_Product.Find(id);
+            _context.tbl_Product.Remove(product);
+            _context.SaveChanges();
+            return RedirectToAction("fetchProduct");
+        }
+        public IActionResult updateProduct(int id)
+        {
+            List<Category> categories = _context.tbl_Category.ToList();
+            ViewData["category"] = categories;
+            var product = _context.tbl_Product.Find(id);
+            ViewBag.selectedCategoryId = product.cat_id;
+            return View(product);
+        }
+        [HttpPost]
+        public IActionResult updateProduct(Product prod)
+        {
+            _context.tbl_Product.Update(prod);
+            _context.SaveChanges();
+            return RedirectToAction("fetchProduct");
+        }
+        public IActionResult ChangeProductImage(IFormFile product_image, Product product)
+        {
+            string ImagePath = Path.Combine(_env.WebRootPath, "product_image", product_image.FileName);
+            FileStream fs = new FileStream(ImagePath, FileMode.Create);
+            product_image.CopyTo(fs);
+            product.product_image = product_image.FileName;
+
+            _context.tbl_Product.Update(product);
+            _context.SaveChanges();
+            return RedirectToAction("fetchProduct");
+        }
+        public IActionResult ShowOrders() {
+           
+            var orders=_context.tbl_order.ToList();
+            OrderDetails temp = new OrderDetails();
+            _context.tbl_Customer.Find();
+            foreach (var item in orders) {
+                      
+            }
+            return View(orders);
+        }
+        public IActionResult OrderDetails(int cust_id) {
+            var details=_context.tbl_order.Where(x => x.customer_id == cust_id);
+            return View(details);
         }
     }
 }

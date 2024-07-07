@@ -42,6 +42,30 @@ namespace EcommerceInAsp.NetCore.Migrations
                     b.ToTable("tbl_admin");
                 });
 
+            modelBuilder.Entity("EcommerceInAsp.NetCore.Models.Cart", b =>
+                {
+                    b.Property<int>("cart_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("cart_status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("cust_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("prod_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("product_quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("cart_id");
+
+                    b.ToTable("tbl_Cart");
+                });
+
             modelBuilder.Entity("EcommerceInAsp.NetCore.Models.Category", b =>
                 {
                     b.Property<int>("category_id")
@@ -49,8 +73,8 @@ namespace EcommerceInAsp.NetCore.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("category_name")
-                        .HasColumnType("int");
+                    b.Property<string>("category_name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("category_id");
 
@@ -132,6 +156,30 @@ namespace EcommerceInAsp.NetCore.Migrations
                     b.ToTable("tbl_Feedback");
                 });
 
+            modelBuilder.Entity("EcommerceInAsp.NetCore.Models.Orders", b =>
+                {
+                    b.Property<int>("order_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("customer_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("product_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
+                    b.HasKey("order_id");
+
+                    b.ToTable("tbl_order");
+                });
+
             modelBuilder.Entity("EcommerceInAsp.NetCore.Models.Product", b =>
                 {
                     b.Property<int>("product_id")
@@ -151,12 +199,30 @@ namespace EcommerceInAsp.NetCore.Migrations
                     b.Property<string>("product_name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("product_price")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("product_price")
+                        .HasColumnType("int");
 
                     b.HasKey("product_id");
 
-                    b.ToTable("Product");
+                    b.HasIndex("cat_id");
+
+                    b.ToTable("tbl_Product");
+                });
+
+            modelBuilder.Entity("EcommerceInAsp.NetCore.Models.Product", b =>
+                {
+                    b.HasOne("EcommerceInAsp.NetCore.Models.Category", "Category")
+                        .WithMany("Product")
+                        .HasForeignKey("cat_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("EcommerceInAsp.NetCore.Models.Category", b =>
+                {
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

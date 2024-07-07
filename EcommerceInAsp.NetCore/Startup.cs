@@ -27,6 +27,7 @@ namespace EcommerceInAsp.NetCore
         {
             services.AddDbContext<mycontext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("myconnection")));
+
             services.AddControllersWithViews();
             services.AddSession(options=> {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
@@ -59,7 +60,7 @@ namespace EcommerceInAsp.NetCore
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Admin}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
