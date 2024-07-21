@@ -207,18 +207,50 @@ namespace EcommerceInAsp.NetCore.Controllers
             return RedirectToAction("fetchProduct");
         }
         public IActionResult ShowOrders() {
-           
-            var orders=_context.tbl_order.ToList();
-            OrderDetails temp = new OrderDetails();
-            _context.tbl_Customer.Find();
-            foreach (var item in orders) {
-                      
+            var temp = _context.tbl_order.Select(x => x.customer_id).Distinct();
+            List<int> customerIds = new List<int>();
+            foreach (var item in temp) {
+                customerIds.Add(item);
             }
-            return View(orders);
+            List<Customer> customers = new List<Customer>();
+            Customer tempCustomer = new Customer();
+            foreach(var item in customerIds)
+            {
+                tempCustomer=_context.tbl_Customer.Find(item);
+                customers.Add(tempCustomer);
+            }
+
+            return View(customers);
         }
         public IActionResult OrderDetails(int cust_id) {
-            var details=_context.tbl_order.Where(x => x.customer_id == cust_id);
-            return View(details);
+            //var orders = _context.tbl_order.Include(x => x.Customer). Where(x => x.customer_id == cust_id).ToList();
+
+            var orderslist = from x in _context.tbl_order
+                             join c in _context.tbl_Product on x.product_id equals c.product_id
+                             join z in _context.tbl_Customer on x.customer_id equals z.customer_id
+                             where x.customer_id == cust_id
+                             select new
+                             {
+                                 Id =x.order_id,
+                                 ProductName = c.product_name,
+                                 CustomerName = z.customer_name,
+                                 Quantity = x.quantity,
+                                 Status=x.status,
+                                 Product_Id=x.product_id
+                             };
+            List<OrderViewModel> ord = new List<OrderViewModel>();
+            OrderViewModel ordersViewModel;
+            foreach (var item in orderslist) {
+                ordersViewModel = new OrderViewModel();
+                ordersViewModel.CustomerName = item.CustomerName;
+                ordersViewModel.ProductName=item.ProductName;
+                ordersViewModel.Quantity = item.Quantity;
+                ordersViewModel.Id = item.Id;
+                ordersViewModel.Status = item.Status;
+                ordersViewModel.ProductId = item.Product_Id;
+                ord.Add(ordersViewModel);
+            }              
+            return View(ord);
         }
     }
 }

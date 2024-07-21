@@ -13,6 +13,8 @@ namespace EcommerceInAsp.NetCore.ViewModel
         public List<Cart> Cart { get; set; }
         public int Total { get; set; }
         public int totalitems { get; set; }
+        public string customer_id { get; set; }
+        public List<Category> Categories { get; set; }
 
     }
 }

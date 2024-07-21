@@ -19,6 +19,7 @@ namespace EcommerceInAsp.NetCore
         {
             Configuration = configuration;
         }
+        
 
         public IConfiguration Configuration { get; }
 
@@ -27,6 +28,16 @@ namespace EcommerceInAsp.NetCore
         {
             services.AddDbContext<mycontext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("myconnection")));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
 
             services.AddControllersWithViews();
             services.AddSession(options=> {
@@ -54,13 +65,15 @@ namespace EcommerceInAsp.NetCore
             app.UseRouting();
             app.UseSession();
 
+            app.UseCors("CorsPolicy");
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Login}/{id?}");
             });
         }
     }

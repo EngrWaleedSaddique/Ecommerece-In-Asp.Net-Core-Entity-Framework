@@ -483,28 +483,16 @@
             <div class="flex-w flex-sb-m p-b-52">
                 <div class="flex-w flex-l-m filter-tope-group m-tb-10">
                     <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
-                        All Products
+                        <a href="@Url.Action("Index","Home")">All Products</a>
                     </button>
-
+                    @foreach (var item in Model.Categories)
+                    {
                     <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".women">
-                        Women
+                        <a href="@Url.Action("Index","Home",new { search_category=item.category_id})">@item.category_name</a>
                     </button>
+                    
+                    }
 
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".men">
-                        Men
-                    </button>
-
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
-                        Bag
-                    </button>
-
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".shoes">
-                        Shoes
-                    </button>
-
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".watches">
-                        Watches
-                    </button>
                 </div>
 
                 <div class="flex-w flex-c-m m-tb-10">
@@ -727,7 +715,7 @@
                 {
                     <form asp-action="addtoCart" method="post">
                         <input type="hidden" name="prod_id" value="@item.product_id" />
-                        <input type="hidden" name="cust_id" value="1" />
+                        <input type="hidden" name="cust_id" value="@Model.customer_id" />
                         <input type="hidden" name="product_quantity" value="1" />
                         <input type="hidden" name="cart_status" value="0" />
 

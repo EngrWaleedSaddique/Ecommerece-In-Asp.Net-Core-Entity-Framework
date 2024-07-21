@@ -1,4 +1,5 @@
-﻿@model List<Orders>
+﻿@using EcommerceInAsp.NetCore.ViewModel
+@model List<OrderViewModel>
 @{
     ViewData["Title"] = "ShowOrders";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
@@ -13,21 +14,29 @@
                 <tr>
                     <th>Order Id</th>
                     <th>Product Name</th>
+                    <th>Product ID</th>
                     <th>Quantity</th>
                     <th>Customer Name</th>
                     <th>Order Status</th>
-                    <th></th>
+
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.order_id</td>
-                        <td>@item.product_id</td>
-                        <td>@item.quantity </td>
-                        <td>@item.customer_id</td>
-                        <td>@item.status</td>
+                        <td>@item.Id</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.ProductId</td>
+                        <td>@item.Quantity </td>
+                        <td>@item.CustomerName</td>
+                        @if (@item.Status == 0)
+                        {
+                            <td>Pending</td>
+                        }
+                        else { 
+                            <td>Delievered</td>
+                        }
                     </tr>
                 }
             </tbody>
@@ -35,4 +44,3 @@
     </div>
     <div class="col-md-2"></div>
 </div>
-

@@ -24,9 +24,7 @@ namespace EcommerceInAsp.NetCore.Models
         //this code is to generate the primary and foriegn key relationship
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<Product>().HasOne(p => p.Category).WithMany(c => c.Product).HasForeignKey(p => p.cat_id).HasForeignKey(p=>p.cat_id);
-
+            modelBuilder.Entity<Orders>().HasOne(x => x.Customer).WithMany(x => x.Order).HasForeignKey(p => p.customer_id);
         }
-
-
     }
 }

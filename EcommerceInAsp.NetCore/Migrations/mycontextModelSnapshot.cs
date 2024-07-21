@@ -61,6 +61,9 @@ namespace EcommerceInAsp.NetCore.Migrations
                     b.Property<int>("product_quantity")
                         .HasColumnType("int");
 
+                    b.Property<string>("user_id")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("cart_id");
 
                     b.ToTable("tbl_Cart");
@@ -89,30 +92,38 @@ namespace EcommerceInAsp.NetCore.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("customer_address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("customer_country")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("customer_email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("customer_id_city")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("customer_id_gender")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("customer_image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("customer_name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("customer_password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("customer_phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("customer_id");
@@ -177,6 +188,8 @@ namespace EcommerceInAsp.NetCore.Migrations
 
                     b.HasKey("order_id");
 
+                    b.HasIndex("customer_id");
+
                     b.ToTable("tbl_order");
                 });
 
@@ -209,6 +222,17 @@ namespace EcommerceInAsp.NetCore.Migrations
                     b.ToTable("tbl_Product");
                 });
 
+            modelBuilder.Entity("EcommerceInAsp.NetCore.Models.Orders", b =>
+                {
+                    b.HasOne("EcommerceInAsp.NetCore.Models.Customer", "Customer")
+                        .WithMany("Order")
+                        .HasForeignKey("customer_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("EcommerceInAsp.NetCore.Models.Product", b =>
                 {
                     b.HasOne("EcommerceInAsp.NetCore.Models.Category", "Category")
@@ -223,6 +247,11 @@ namespace EcommerceInAsp.NetCore.Migrations
             modelBuilder.Entity("EcommerceInAsp.NetCore.Models.Category", b =>
                 {
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("EcommerceInAsp.NetCore.Models.Customer", b =>
+                {
+                    b.Navigation("Order");
                 });
 #pragma warning restore 612, 618
         }

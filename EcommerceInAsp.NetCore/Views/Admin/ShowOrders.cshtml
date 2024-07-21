@@ -1,4 +1,4 @@
-﻿@model List<Orders>
+﻿@model List<Customer>
 @{
     ViewData["Title"] = "ShowOrders";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
@@ -11,26 +11,23 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Order Id</th>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
+                    <th>Customer Id</th>
                     <th>Customer Name</th>
-                    <th>Order Status</th>
-                    <th></th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach(var item in Model) {
-                <tr>
-                    <td>@item.order_id</td>
-                    <td>@item.product_id</td>
-                    <td>@item.quantity </td>
-                    <td>@item.customer_id</td>
-                    <td>@item.status</td>
-                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.customer_id</td>
+                        <td>@item.customer_name</td>
+                        <td><a href="@Url.Action("OrderDetails","Admin",new {cust_id=item.customer_id})" class="btn btn-primary">Details</a></td>
+                    </tr>
                 }
             </tbody>
         </table>
     </div>
     <div class="col-md-2"></div>
 </div>
+

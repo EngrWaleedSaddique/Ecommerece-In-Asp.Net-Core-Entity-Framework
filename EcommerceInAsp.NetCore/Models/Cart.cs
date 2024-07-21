@@ -14,6 +14,7 @@ namespace EcommerceInAsp.NetCore.Models
         public int cust_id { get; set; }
         public int product_quantity { get; set; }
         public int cart_status { get; set; }
+        public string user_id { get; set; }
 
     }
 }
